@@ -1,17 +1,56 @@
 # voyage-tasks
 
-Your project's `readme` is as important to success as your code. For 
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+## Getting started
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point - 
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+This project uses **[pnpm](https://pnpm.io)** as its only package manager. `npm install` and `yarn install` are blocked and will fail with a "Use pnpm" message.
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+### Prerequisites
 
-> Own it & Make it your Own!
+- [Node.js](https://nodejs.org) 22 or newer
+- pnpm 10.24.x (the exact version is pinned in `package.json` under `packageManager`)
+
+### Install pnpm
+
+The easiest way is [Corepack](https://nodejs.org/api/corepack.html), which ships with Node and automatically uses the pinned pnpm version:
+
+```bash
+corepack enable
+```
+
+Alternatively, install pnpm globally: `npm install -g pnpm@10.24.0`
+
+Check it worked with `pnpm -v`.
+
+### Install dependencies
+
+```bash
+pnpm install
+```
+
+### Common commands
+
+| Task | npm equivalent | pnpm command |
+| --- | --- | --- |
+| Install all dependencies | `npm install` | `pnpm install` |
+| Add a dependency | `npm install <pkg>` | `pnpm add <pkg>` |
+| Add a dev dependency | `npm install -D <pkg>` | `pnpm add -D <pkg>` |
+| Remove a dependency | `npm uninstall <pkg>` | `pnpm remove <pkg>` |
+| Update dependencies | `npm update` | `pnpm update` |
+| Run a script | `npm run <script>` | `pnpm run <script>` (or `pnpm <script>`) |
+| Run a one-off package | `npx <pkg>` | `pnpm dlx <pkg>` |
+
+### Good to know
+
+- Commit `pnpm-lock.yaml`. It keeps everyone on identical dependency versions.
+- Never commit `node_modules/`, `package-lock.json` or `yarn.lock`.
+- pnpm keeps one shared copy of each package on disk and links it into `node_modules`, so installs are fast and use less space. It is also strict: you can only import packages you declared in `package.json`.
+
+### Troubleshooting
+
+- **"Use "pnpm install" for installation in this project"**: you ran `npm` or `yarn`. Delete any `package-lock.json`/`yarn.lock` and `node_modules`, then run `pnpm install`.
+- **`pnpm: command not found`**: run `corepack enable`, or install pnpm globally (see above).
+- **Version or engine mismatch errors**: update Node to 22+ and make sure `pnpm -v` matches the version in `package.json`.
+- **Odd install problems**: remove `node_modules` and run `pnpm install` again; `pnpm store prune` clears unused packages from the shared store.
 
 ## Team Documents
 
