@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { client } from "./api";
+import { EventList } from "./components/EventList";
 
 export function App() {
 	const [status, setStatus] = useState<string>("loading…");
@@ -18,6 +19,7 @@ export function App() {
 			<p>
 				Server status: <strong>{status}</strong>
 			</p>
+			<EventList />
 		</main>
 	);
 }
