@@ -74,6 +74,7 @@ your repo access and to practice PR'ing with your team *before* you start
 coding!
 
 - Fouad: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Rishabh: [GitHub](https://github.com/rishabh1024) / [LinkedIn](https://www.linkedin.com/in/rishabh-aggarwal20/)
 - Nick: [GitHub](https://github.com/patonik) / [LinkedIn](https://linkedin.com/in/liaccountname)
 
    ...
