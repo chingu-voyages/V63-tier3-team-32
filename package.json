@@ -8,6 +8,16 @@
 		"pnpm": ">=10.24.0 <11"
 	},
 	"scripts": {
-		"preinstall": "npx --yes only-allow pnpm"
+		"preinstall": "npx --yes only-allow pnpm",
+		"dev": "pnpm -r --parallel dev",
+		"build": "pnpm -r build",
+		"lint": "biome check .",
+		"format": "biome check --write .",
+		"typecheck": "pnpm -r typecheck",
+		"test": "pnpm -r test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.6.7",
+		"typescript": "^7.0.2"
 	}
 }

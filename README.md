@@ -27,6 +27,49 @@ Check it worked with `pnpm -v`.
 pnpm install
 ```
 
+### Project layout
+
+```
+web/      React 19 + Vite frontend      (@event-planner/web)
+server/   Hono API on Node               (@event-planner/server)
+```
+
+`web` calls `server` through Hono's typed client and imports only the route type (`AppType`), so changing a route's response in `server` is a compile error in `web` until fixed.
+
+### Adding a route (example)
+
+`server/src/routes/events.ts` and `registrations.ts` return mock data and show the pattern:
+
+1. Create a chained `new Hono().get(...)` router in `server/src/routes/`.
+2. Mount it in `server/src/app.ts` with `.route("/api/<path>", router)`. Keep the chain so `AppType` includes it.
+3. Call it from `web` through the typed client. For example, `client.api.events.$get()` is `GET /api/events`, and `client.api.events[":eventId"].registrations.$get({ param: { eventId } })` is `GET /api/events/:eventId/registrations`. See `web/src/components/EventList.tsx`.
+4. Add a test with `app.request("/api/...")`, as in `server/src/routes/routes.test.ts`.
+
+### Run the app
+
+```bash
+pnpm dev
+```
+
+This starts both apps in parallel:
+
+- Web: <http://localhost:5173>. Vite proxies `/api` to the server, so no CORS setup is needed.
+- Server: <http://localhost:3000> (set `PORT` to change it).
+
+### Verify your setup
+
+1. `pnpm install` finishes without errors.
+2. `pnpm dev`, then open <http://localhost:5173>. The page should show **Server status: ok**.
+3. `curl http://localhost:3000/api/health` returns `{"status":"ok"}`.
+4. These all pass:
+
+```bash
+pnpm typecheck   # strict tsc in every package
+pnpm lint        # Biome (use `pnpm format` to auto-fix)
+pnpm test        # Vitest in every package
+pnpm build       # production builds
+```
+
 ### Common commands
 
 | Task | npm equivalent | pnpm command |
