@@ -11,6 +11,72 @@
 		]
 	},
 	"formatter": { "enabled": true, "indentStyle": "tab" },
-	"linter": { "enabled": true, "rules": { "preset": "none" } },
-	"assist": { "actions": { "source": { "organizeImports": "on" } } }
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "none",
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"paths": {
+							"@anthropic-ai/sdk": "Only server/src/ai may import the AI SDK.",
+							"openai": "Only server/src/ai may import the AI SDK.",
+							"ai": "Only server/src/ai may import the AI SDK."
+						},
+						"patterns": [
+							{
+								"group": ["@ai-sdk/*"],
+								"message": "Only server/src/ai may import the AI SDK."
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
+	"overrides": [
+		{
+			"includes": ["server/src/ai/**"],
+			"linter": {
+				"rules": { "style": { "noRestrictedImports": "off" } }
+			}
+		},
+		{
+			"includes": ["web/**"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": {
+							"level": "error",
+							"options": {
+								"paths": {
+									"@anthropic-ai/sdk": "Only server/src/ai may import the AI SDK.",
+									"openai": "Only server/src/ai may import the AI SDK.",
+									"ai": "Only server/src/ai may import the AI SDK."
+								},
+								"patterns": [
+									{
+										"group": ["@ai-sdk/*"],
+										"message": "Only server/src/ai may import the AI SDK."
+									},
+									{
+										"group": [
+											"**/server/**",
+											"@event-planner/server",
+											"@event-planner/server/*"
+										],
+										"importNamePattern": "AppType",
+										"invertImportNamePattern": true,
+										"message": "web may import only the AppType route type from server."
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	]
 }
