@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.6.7
+        specifier: 2.6.7
         version: 2.6.7
       lefthook:
         specifier: ^2.2.2

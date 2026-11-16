@@ -77,9 +77,11 @@ pnpm build       # production builds
 - **pre-commit**: Biome checks and fixes staged files, and re-stages the fixes.
 - **pre-push**: `pnpm lint` (includes the import boundary rules) and `pnpm typecheck`.
 
+Editors: the repo ships `.vscode` settings (Biome format on save) and an `.editorconfig`. Biome is pinned to an exact version, so bump it deliberately.
+
 Hooks are a convenience. `--no-verify` skips them, but never gets code past CI.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on PRs to `main` and pushes to `main`, as four parallel jobs: `lint` (`biome ci`), `typecheck`, `test` (plus `build`) and `secrets` (`gitleaks`, CI only).
+GitHub Actions (`.github/workflows/ci.yml`) runs on PRs to `main` and pushes to `main`, as four parallel jobs: `lint` (`biome ci`), `typecheck`, `test` (plus `build`) and `secrets` (`gitleaks` binary, pinned and checksum-verified, CI only).
 
 Repo admins should protect `main`: require a pull request and require the `lint`, `typecheck`, `test` and `secrets` status checks before merging.
 
