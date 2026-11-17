@@ -3,5 +3,10 @@
 
 # Dependencies
 node_modules/
+
+# Environment variables (contain secrets)
+.env
+.env.*
+!.env.example
 dist/
 *.tsbuildinfo
