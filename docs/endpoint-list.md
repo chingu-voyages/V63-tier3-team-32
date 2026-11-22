@@ -29,7 +29,3 @@
 
 - Compare events: `GET /api/comparisons?eventId=1&eventId=2`
 - Compare turnout by source: `GET /api/comparisons/{eventId}`
-
-## Guest trial
-
-- Start a guest trial session: `POST /api/guest-sessions`
