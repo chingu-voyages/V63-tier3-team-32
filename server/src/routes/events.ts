@@ -5,8 +5,8 @@ const events = [
 	{
 		id: "evt_1",
 		name: "Spring Meetup",
-		date: "2026-12-05",
-		time: "18:30",
+		date: "2026-12-25",
+		time: "00:00",
 		location: "Community Hall",
 		target: 80,
 		state: "upcoming",
