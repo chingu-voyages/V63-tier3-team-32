@@ -116,6 +116,7 @@ You may find these helpful as you work together to organize your project.
 
 - [Team Project Ideas](./docs/team_project_ideas.md)
 - [Team Decision Log](./docs/team_decision_log.md)
+- [Team Instructions](./INSTRUCTIONS.md): workflow, branches, reviews, AI use
 
 Meeting Agenda templates (located in the `/docs` directory in this repo):
 
