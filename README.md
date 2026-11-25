@@ -135,6 +135,7 @@ coding!
 - Fouad: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
 - Rishabh: [GitHub](https://github.com/rishabh1024) / [LinkedIn](https://www.linkedin.com/in/rishabh-aggarwal20/)
 - Nick: [GitHub](https://github.com/patonik) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Cris: [GitHub](https://github.com/cris-valente) / [LinkedIn](https://www.linkedin.com/in/cristiano-valente/)
 
    ...
 - Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
