@@ -85,6 +85,19 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on PRs to `main` and pushes to 
 
 Repo admins should protect `main`: require a pull request and require the `lint`, `typecheck`, `test` and `secrets` status checks before merging.
 
+### Deployment
+
+Production runs on Cloudflare. A single Worker (`server/wrangler.jsonc`) serves both apps from one origin:
+
+- `/api/*` goes to the Hono API (`run_worker_first`).
+- Everything else is served from `web/dist` as static assets, with single-page-app fallback to `index.html` for client-side routes.
+
+Because the origin is shared, the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
+
+`.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/`. Pull requests are never deployed.
+
+To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm --filter @event-planner/server exec wrangler dev`.
+
 ### Common commands
 
 | Task | npm equivalent | pnpm command |
