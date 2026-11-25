@@ -96,6 +96,8 @@ Because the origin is shared, the web app needs no CORS setup or API base URL, a
 
 `.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/`. Pull requests are never deployed.
 
+To deploy manually without CI, run `pnpm deploy:cloudflare` from the repo root (needs `wrangler login` or `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`). It ships your working tree and does not run Supabase migrations.
+
 To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm --filter @event-planner/server exec wrangler dev`.
 
 ### Common commands
