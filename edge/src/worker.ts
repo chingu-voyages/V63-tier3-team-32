@@ -31,9 +31,9 @@ async function keyMatches(given: string, expected: string): Promise<boolean> {
 // Service Token the browser never sees.
 export default {
 	async fetch(request, env): Promise<Response> {
-		if (!env.ACCESS_KEY) {
-			// Fail closed: a missing key must never mean "allow everything".
-			console.error("ACCESS_KEY is not set");
+		if (!env.ACCESS_KEY || !env.SERVICE_JWT_SECRET) {
+			// Fail closed: a missing secret must never mean "allow everything".
+			console.error("ACCESS_KEY and SERVICE_JWT_SECRET must both be set");
 			return Response.json({ error: "Server misconfigured" }, { status: 500 });
 		}
 		const given = request.headers.get(ACCESS_KEY_HEADER);

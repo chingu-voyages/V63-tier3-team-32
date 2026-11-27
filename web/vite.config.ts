@@ -14,10 +14,14 @@ function devServiceToken(secret: string | undefined): Plugin {
 		name: "dev-service-token",
 		apply: "serve",
 		configureServer(server) {
-			if (!secret) {
-				throw new Error("SERVICE_JWT_SECRET must be set in server/.env");
-			}
 			server.middlewares.use("/api", async (req, _res, next) => {
+				// Checked per request, not at startup, so tests and builds that
+				// never call the API don't need the secret.
+				if (!secret) {
+					return next(
+						new Error("SERVICE_JWT_SECRET must be set in server/.env"),
+					);
+				}
 				// Overwrites anything the client sent under this name.
 				req.headers[SERVICE_TOKEN_HEADER.toLowerCase()] =
 					await signServiceToken(secret);

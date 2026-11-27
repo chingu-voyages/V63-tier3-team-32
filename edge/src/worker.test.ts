@@ -102,6 +102,16 @@ describe("edge worker", () => {
 		expect(seen[0]?.headers.get(ACCESS_KEY_HEADER)).toBeNull();
 	});
 
+	it("fails closed when the service secret is not configured", async () => {
+		const { seen, env } = fakeApi();
+		const res = await run(
+			new Request("https://app.test/api/events", { headers: authed }),
+			{ ...env, SERVICE_JWT_SECRET: "" },
+		);
+		expect(res.status).toBe(500);
+		expect(seen).toHaveLength(0);
+	});
+
 	it("fails closed when the access key is not configured", async () => {
 		const { seen, env } = fakeApi();
 		const res = await run(new Request("https://app.test/api/events"), {
