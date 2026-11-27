@@ -32,6 +32,7 @@ pnpm install
 ```
 web/      React 19 + Vite frontend      (@event-planner/web)
 server/   Hono API on Node               (@event-planner/server)
+edge/     Cloudflare Worker, public entry point (@event-planner/edge)
 ```
 
 `web` calls `server` through Hono's typed client and imports only the route type (`AppType`), so changing a route's response in `server` is a compile error in `web` until fixed.
@@ -87,25 +88,25 @@ Repo admins should protect `main`: require a pull request and require the `lint`
 
 ### Deployment
 
-Production runs on Cloudflare. A single Worker (`server/wrangler.jsonc`) serves both apps from one origin:
+Production runs on Cloudflare as two Workers:
 
-- `/api/*` goes to the Hono API (`run_worker_first`).
-- Everything else is served from `web/dist` as static assets, with single-page-app fallback to `index.html` for client-side routes.
-
-Production URLs (one origin, `https://event-planner-server.chingu-v63.workers.dev`):
+- **edge** (`edge/wrangler.jsonc`) is the public entry point. It serves `web/dist` as static assets, with single-page-app fallback, and forwards `/api/*` to the server after checking the access key.
+- **server** (`server/wrangler.jsonc`) is the Hono API. It only accepts requests that carry a service token signed by the edge.
 
 | What | URL |
 | --- | --- |
-| Frontend | <https://event-planner-server.chingu-v63.workers.dev> |
-| Backend API | <https://event-planner-server.chingu-v63.workers.dev/api> (for example `/api/health`) |
+| Frontend and API (use this) | <https://event-planner.chingu-v63.workers.dev> (API at `/api`, needs the access key) |
+| Server Worker (token required) | <https://event-planner-server.chingu-v63.workers.dev> |
 
-Because the origin is shared, the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
+How the two layers of authentication work, the secrets, local testing and direct access are documented in [`edge/README.md`](./edge/README.md).
 
-`.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/`. Pull requests are never deployed.
+The web app and the API share the edge's origin, so the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
+
+`.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/` and then from `edge/`. Pull requests are never deployed.
 
 To deploy manually without CI, run `pnpm deploy:cloudflare` from the repo root (needs `wrangler login` or `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`). It ships your working tree and does not run Supabase migrations.
 
-To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm --filter @event-planner/server exec wrangler dev`.
+To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm dev:edge`.
 
 ### Common commands
 
