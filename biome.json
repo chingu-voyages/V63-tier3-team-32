@@ -77,6 +77,12 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["web/vite.config.ts"],
+			"linter": {
+				"rules": { "style": { "noRestrictedImports": "off" } }
+			}
 		}
 	]
 }

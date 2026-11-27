@@ -8,6 +8,7 @@ node_modules/
 .env
 .env.*
 !.env.example
+.dev.vars*
 
 # Local-only Cursor AI context settings
 .cursorignore
