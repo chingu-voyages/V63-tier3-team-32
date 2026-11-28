@@ -16,16 +16,16 @@
 
 ## Promotions and analysis
 
-- Generate a promotional draft: `POST /api/events/{eventId}/promotions`
-- List promotional drafts: `GET /api/events/{eventId}/promotions`
-- View a draft: `GET /api/promotions/{promotionId}`
-- Edit a draft: `PATCH /api/promotions/{promotionId}`
-- Request an AI revision: `POST /api/promotions/{promotionId}/revisions`
+- Generate a promotion: `POST /api/events/{eventId}/promotions`
+- List promotions: `GET /api/events/{eventId}/promotions`
+- View a draft: `GET /api/events/{eventId}/promotions/{promotionId}`
+- Edit a draft: `PATCH /api/events/promotions/{promotionId}`
+- Request an AI revision: `PATCH /api/events/promotions/{promotionId}?q=user_prompt`
 - Generate an analysis: `POST /api/events/{eventId}/analyses`
 - List analyses: `GET /api/events/{eventId}/analyses`
-- View an analysis: `GET /api/analyses/{analysisId}`
+- View an analysis: `GET /api/events/analyses/{analysisId}`
 
 ## Comparisons
 
-- Compare events: `GET /api/comparisons?eventId=1&eventId=2`
-- Compare turnout by source: `GET /api/comparisons/{eventId}`
+- Compare events: `GET /api/events/comparisons?eventId=1&eventId=2`
+- Compare turnout by source: `GET /api/events/comparisons/{eventId}`
