@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import app from "./app.js";
 import { getSupabaseClient } from "./lib/db.js";
+import { authedRequest } from "./test-helpers.js";
 
 // Mocked so the test controls both outcomes directly, instead of depending
 // on a live Supabase project (or its Data API being enabled) in the test
@@ -22,7 +22,7 @@ function fakeSupabaseClient(error: { code: string; message: string } | null) {
 
 describe("GET /api/health", () => {
 	it("returns ok", async () => {
-		const res = await app.request("/api/health");
+		const res = await authedRequest("/api/health");
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ status: "ok" });
 	});
@@ -36,7 +36,7 @@ describe("GET /api/health/db", () => {
 	it("returns ok when the database responds with no error", async () => {
 		vi.mocked(getSupabaseClient).mockReturnValue(fakeSupabaseClient(null));
 
-		const res = await app.request("/api/health/db");
+		const res = await authedRequest("/api/health/db");
 
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ status: "ok", db: "reachable" });
@@ -53,7 +53,7 @@ describe("GET /api/health/db", () => {
 			}),
 		);
 
-		const res = await app.request("/api/health/db");
+		const res = await authedRequest("/api/health/db");
 
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ status: "ok", db: "reachable" });
@@ -69,7 +69,7 @@ describe("GET /api/health/db", () => {
 			}),
 		);
 
-		const res = await app.request("/api/health/db");
+		const res = await authedRequest("/api/health/db");
 
 		expect(res.status).toBe(503);
 		expect(await res.json()).toEqual({ status: "error", db: "unreachable" });

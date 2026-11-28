@@ -1,0 +1,3 @@
+# Copy to server/.dev.vars. Used by `pnpm dev:edge` (server Worker under Wrangler).
+# Must match SERVICE_JWT_SECRET in edge/.dev.vars.
+SERVICE_JWT_SECRET=your-long-random-secret

@@ -10,12 +10,13 @@
 	"scripts": {
 		"preinstall": "npx --yes only-allow pnpm",
 		"dev": "pnpm -r --parallel dev",
+		"dev:edge": "pnpm --filter @event-planner/edge dev:edge",
 		"build": "pnpm -r build",
 		"lint": "biome check .",
 		"format": "biome check --write .",
 		"typecheck": "pnpm -r typecheck",
 		"test": "pnpm -r test",
-		"deploy:cloudflare": "pnpm --filter @event-planner/web build && pnpm --filter @event-planner/server exec wrangler deploy",
+		"deploy:cloudflare": "pnpm --filter @event-planner/web build && pnpm --filter @event-planner/server exec wrangler deploy && pnpm --filter @event-planner/edge exec wrangler deploy",
 		"prepare": "[ -n \"$CI\" ] || lefthook install"
 	},
 	"devDependencies": {

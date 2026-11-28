@@ -1,0 +1,17 @@
+{
+	"name": "@event-planner/edge",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev:edge": "wrangler dev -c wrangler.jsonc -c ../server/wrangler.jsonc",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^5.20261119.1",
+		"typescript": "^7.0.2",
+		"vitest": "^5.1.0",
+		"wrangler": "^4.165.0"
+	}
+}

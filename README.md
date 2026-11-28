@@ -32,6 +32,7 @@ pnpm install
 ```
 web/      React 19 + Vite frontend      (@event-planner/web)
 server/   Hono API on Node               (@event-planner/server)
+edge/     Cloudflare Worker, public entry point (@event-planner/edge)
 ```
 
 `web` calls `server` through Hono's typed client and imports only the route type (`AppType`), so changing a route's response in `server` is a compile error in `web` until fixed.
@@ -44,6 +45,18 @@ server/   Hono API on Node               (@event-planner/server)
 2. Mount it in `server/src/app.ts` with `.route("/api/<path>", router)`. Keep the chain so `AppType` includes it.
 3. Call it from `web` through the typed client. For example, `client.api.events.$get()` is `GET /api/events`, and `client.api.events[":eventId"].registrations.$get({ param: { eventId } })` is `GET /api/events/:eventId/registrations`. See `web/src/components/EventList.tsx`.
 4. Add a test with `app.request("/api/...")`, as in `server/src/routes/routes.test.ts`.
+
+### Configure environment variables
+
+Copy the example files and fill in the values (all copies are gitignored). Ask a teammate for the Supabase values.
+
+```bash
+cp server/.env.example server/.env                # pnpm dev (needs Supabase keys)
+cp server/.dev.vars.example server/.dev.vars      # pnpm dev:edge only
+cp edge/.dev.vars.example edge/.dev.vars          # pnpm dev:edge only
+```
+
+`SERVICE_JWT_SECRET` must match across the files; generate one with `openssl rand -hex 24`. Which variable each part needs is listed in [`edge/README.md`](./edge/README.md#secrets).
 
 ### Run the app
 
@@ -87,25 +100,27 @@ Repo admins should protect `main`: require a pull request and require the `lint`
 
 ### Deployment
 
-Production runs on Cloudflare. A single Worker (`server/wrangler.jsonc`) serves both apps from one origin:
+Production runs on Cloudflare as two Workers:
 
-- `/api/*` goes to the Hono API (`run_worker_first`).
-- Everything else is served from `web/dist` as static assets, with single-page-app fallback to `index.html` for client-side routes.
-
-Production URLs (one origin, `https://event-planner-server.chingu-v63.workers.dev`):
+- **edge** (`edge/wrangler.jsonc`) is the public entry point. It serves `web/dist` as static assets, with single-page-app fallback, and forwards `/api/*` to the server after checking the access key.
+- **server** (`server/wrangler.jsonc`) is the Hono API. It only accepts requests that carry a service token signed by the edge.
 
 | What | URL |
 | --- | --- |
-| Frontend | <https://event-planner-server.chingu-v63.workers.dev> |
-| Backend API | <https://event-planner-server.chingu-v63.workers.dev/api> (for example `/api/health`) |
+| Frontend and API (use this) | <https://event-planner.chingu-v63.workers.dev> (API at `/api`, needs the access key) |
+| Server Worker (token required) | <https://event-planner-server.chingu-v63.workers.dev> |
 
-Because the origin is shared, the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
+A diagram of how `web`, `edge` and `server` fit together, locally and in production, is in [`docs/architecture-overview.html`](./docs/architecture-overview.html) (run `pnpm docs:architecture` to open it in your browser).
 
-`.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/`. Pull requests are never deployed.
+How the two layers of authentication work, the secrets, local testing and direct access are documented in [`edge/README.md`](./edge/README.md).
+
+The web app and the API share the edge's origin, so the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
+
+`.github/workflows/deploy.yml` runs after CI succeeds on a push to `main`. It applies Supabase migrations, builds `web`, then runs `wrangler deploy` from `server/` and then from `edge/`. Pull requests are never deployed.
 
 To deploy manually without CI, run `pnpm deploy:cloudflare` from the repo root (needs `wrangler login` or `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`). It ships your working tree and does not run Supabase migrations.
 
-To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm --filter @event-planner/server exec wrangler dev`.
+To preview the production setup locally, run `pnpm --filter @event-planner/web build`, then `pnpm dev:edge`.
 
 ### Common commands
 
