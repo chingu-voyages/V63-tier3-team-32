@@ -46,6 +46,18 @@ edge/     Cloudflare Worker, public entry point (@event-planner/edge)
 3. Call it from `web` through the typed client. For example, `client.api.events.$get()` is `GET /api/events`, and `client.api.events[":eventId"].registrations.$get({ param: { eventId } })` is `GET /api/events/:eventId/registrations`. See `web/src/components/EventList.tsx`.
 4. Add a test with `app.request("/api/...")`, as in `server/src/routes/routes.test.ts`.
 
+### Configure environment variables
+
+Copy the example files and fill in the values (all copies are gitignored). Ask a teammate for the Supabase values.
+
+```bash
+cp server/.env.example server/.env                # pnpm dev (needs Supabase keys)
+cp server/.dev.vars.example server/.dev.vars      # pnpm dev:edge only
+cp edge/.dev.vars.example edge/.dev.vars          # pnpm dev:edge only
+```
+
+`SERVICE_JWT_SECRET` must match across the files; generate one with `openssl rand -hex 24`. Which variable each part needs is listed in [`edge/README.md`](./edge/README.md#secrets).
+
 ### Run the app
 
 ```bash

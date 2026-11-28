@@ -1,0 +1,4 @@
+# Copy to edge/.dev.vars. Used by `pnpm dev:edge` (edge Worker under Wrangler).
+# Must match SERVICE_JWT_SECRET in server/.dev.vars.
+SERVICE_JWT_SECRET=your-long-random-secret
+ACCESS_KEY=your-shared-access-key

@@ -28,8 +28,18 @@ Browser ──X-Access-Key──▶ Edge Worker ──X-Service-Token──▶ S
 | --- | --- | --- |
 | `ACCESS_KEY` | Edge only | The shared passphrase users type in. Use a random value. |
 | `SERVICE_JWT_SECRET` | Edge **and** server | Must be identical on both. Keep it different from `ACCESS_KEY`. |
+| `SUPABASE_URL` | Server only | Supabase project URL. |
+| `SUPABASE_SECRET_KEY` | Server only | Bypasses RLS. Never give it to the edge or the web app. Get it from whoever owns the Supabase project. |
 
-Local values live in gitignored files: `server/.env`, `server/.dev.vars` and `edge/.dev.vars`. See `.env.example`. They do not need to match production and should not.
+Local values live in gitignored files. Copy each `*.example` file and fill it in:
+
+| Copy | To | Needed for |
+| --- | --- | --- |
+| `server/.env.example` | `server/.env` | `pnpm dev`, server tests that touch Supabase, `mint-token`. Also read by Vite for the dev service token. |
+| `server/.dev.vars.example` | `server/.dev.vars` | `pnpm dev:edge` |
+| `edge/.dev.vars.example` | `edge/.dev.vars` | `pnpm dev:edge` |
+
+`SERVICE_JWT_SECRET` must be the same in all three files. Running only the server, or only the web app and server, needs just `server/.env`. Running only the edge needs just `edge/.dev.vars`. The root `.env.example` lists every variable in one place. Local values do not need to match production and should not.
 
 Set or rotate a deployed secret (no redeploy needed, it applies within seconds):
 
