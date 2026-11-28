@@ -110,6 +110,8 @@ Production runs on Cloudflare as two Workers:
 | Frontend and API (use this) | <https://event-planner.chingu-v63.workers.dev> (API at `/api`, needs the access key) |
 | Server Worker (token required) | <https://event-planner-server.chingu-v63.workers.dev> |
 
+A diagram of how `web`, `edge` and `server` fit together, locally and in production, is in [`docs/architecture-overview.html`](./docs/architecture-overview.html) (run `pnpm docs:architecture` to open it in your browser).
+
 How the two layers of authentication work, the secrets, local testing and direct access are documented in [`edge/README.md`](./edge/README.md).
 
 The web app and the API share the edge's origin, so the web app needs no CORS setup or API base URL, and `hc<AppType>("/")` works unchanged in production.
