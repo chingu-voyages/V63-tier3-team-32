@@ -10,6 +10,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
+		"@event-planner/db-types": "workspace:*",
 		"@hono/node-server": "^2.1.8",
 		"@supabase/supabase-js": "^2.x",
 		"hono": "^4.13.18",

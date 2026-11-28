@@ -1,3 +1,4 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { Hono } from "hono";
 import { z } from "zod";
 import { getSupabaseClient } from "../lib/db.js";
@@ -19,7 +20,9 @@ export const healthRoute = new Hono()
 	// the request reached the database through the Data API; any other
 	// error (e.g. the Data API itself being unreachable) means it didn't.
 	.get("/db", async (c) => {
-		const { error } = await getSupabaseClient()
+		// Untyped on purpose: the probe table is not in the generated Database type.
+		const probe: SupabaseClient = getSupabaseClient();
+		const { error } = await probe
 			.from("__connection_probe__")
 			.select("*")
 			.limit(1);

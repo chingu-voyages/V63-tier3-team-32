@@ -1,0 +1,13 @@
+{
+	"name": "@event-planner/db-types",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"gen": "cd ../.. && supabase gen types typescript --local > packages/db-types/src/database.types.ts",
+		"typecheck": "tsc --noEmit"
+	}
+}
