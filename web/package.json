@@ -10,6 +10,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
+		"@event-planner/db-types": "workspace:*",
 		"hono": "^4.13.18",
 		"react": "^19.3.1",
 		"react-dom": "^19.3.1"

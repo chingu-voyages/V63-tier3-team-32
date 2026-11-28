@@ -18,8 +18,13 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
+  packages/db-types: {}
+
   server:
     dependencies:
+      '@event-planner/db-types':
+        specifier: workspace:*
+        version: link:../packages/db-types
       '@hono/node-server':
         specifier: ^2.1.8
         version: 2.1.8(hono@4.13.18)
@@ -51,6 +56,9 @@ importers:
 
   web:
     dependencies:
+      '@event-planner/db-types':
+        specifier: workspace:*
+        version: link:../packages/db-types
       hono:
         specifier: ^4.13.18
         version: 4.13.18

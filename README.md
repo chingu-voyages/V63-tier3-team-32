@@ -70,6 +70,17 @@ pnpm test        # Vitest in every package
 pnpm build       # production builds
 ```
 
+### Database types
+
+Types in `packages/db-types` are generated from the migrations. Never hand-edit them. After adding or changing a migration, with the [Supabase CLI](https://supabase.com/docs/guides/cli) and Docker installed:
+
+```bash
+supabase start    # local DB, applies supabase/migrations
+pnpm db:types     # rewrites packages/db-types/src/database.types.ts
+```
+
+Commit the result. CI regenerates the types and fails if they differ.
+
 ### Git hooks and CI
 
 [Lefthook](https://lefthook.dev) installs hooks automatically on `pnpm install` (skipped when `CI` is set).
